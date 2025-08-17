@@ -1,0 +1,9 @@
+node_modules/
+.next/
+__pycache__/
+chroma_storage/
+saved_models/
+*.wav
+*.mp3
+.env
+.env.local
