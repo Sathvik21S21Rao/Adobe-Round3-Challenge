@@ -50,7 +50,7 @@ def predict(request: PDFRequest):
     # Create chunks with sections
     chunks, sections = create_chunks_with_sections(
         pdf_path=request.file_path,
-        headers=result.get("outline", []),
+        headers=result.get("outline", []) if type(result) is dict else [],
         folder_id=request.folder_id,
         user_id=request.user_id
     )
@@ -79,9 +79,9 @@ async def insights(request: InsightRequest):
     currPDFName = request.currPDFName
     async def event_generator():
         async for chunk in stream_insights(prev_summaries, selected_text, currPDFName):
-            yield chunk
+            yield chunk.encode('utf-8')
 
-    return StreamingResponse(event_generator(), media_type="text/plain")
+    return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 @app.post("/podcast")
 def podcast(request: PodcastRequest):
@@ -94,6 +94,7 @@ async def guide(request: GuideRequest):
     summaries = request.summaries
     async def event_generator():
         async for chunk in stream_guide(summaries):
-            yield chunk
+            
+            yield chunk.encode('utf-8')
 
-    return StreamingResponse(event_generator(), media_type="text/plain")
+    return StreamingResponse(event_generator(), media_type="text/event-stream")

@@ -53,10 +53,12 @@ export default function InsightGenerator({
     }
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/insights", {
+      const serviceName = process.env.SERVICE_NAME || '127.0.0.1';
+      const res = await fetch(`http://${serviceName}:8000/insights`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ selected_text, currPDFName, summaries }),
+         cache: "no-store",
       });
 
       if (!res.ok || !res.body) {
@@ -74,6 +76,7 @@ export default function InsightGenerator({
         if (value) {
           const chunk = decoder.decode(value, { stream: true });
           // Append chunk to insight for live Markdown rendering
+          console.log(chunk);
           setInsight((prev) => prev + chunk);
         }
         done = readerDone;

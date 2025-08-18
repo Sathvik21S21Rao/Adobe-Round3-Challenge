@@ -60,11 +60,13 @@ export default function Sidebar({ folderId, pdfList }: SidebarProps) {
 
       const data = await resSummaries.json();
       const summaries = data.summaries;
-
-      const res = await fetch("http://127.0.0.1:8000/guide", {
+      const serviceName = process.env.SERVICE_NAME || '127.0.0.1';
+      const res = await fetch(`http://${serviceName}:8000/guide`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ summaries }),
+        cache: "no-store",
+   
       });
 
       if (!res.ok || !res.body) {
@@ -104,10 +106,11 @@ export default function Sidebar({ folderId, pdfList }: SidebarProps) {
       )}
 
       <div
-        className={`fixed top-0 right-0 h-full w-96 bg-gray-50 border-l border-gray-200 shadow-lg transform transition-transform duration-300 z-40 flex flex-col ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
+  className={`fixed top-0 right-0 h-full w-[450px] bg-gray-50 border-l border-gray-200 shadow-lg transform transition-transform duration-300 z-40 flex flex-col ${
+    isOpen ? "translate-x-0" : "translate-x-full"
+  }`}
+>
+
         <div className="px-4 py-3 border-b bg-white flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-800">AI Assistant</h2>
           <button onClick={() => setIsOpen(false)} className="p-1 rounded-md hover:bg-gray-100">
@@ -161,7 +164,7 @@ export default function Sidebar({ folderId, pdfList }: SidebarProps) {
             </div>
           )}
           {response && (
-            <div className="prose prose-sm max-w-none break-words whitespace-pre-wrap overflow-x-hidden">
+            <div className="prose prose-sm max-w-none break-all whitespace-pre-wrap overflow-x-hidden">
               <ReactMarkdown>{response}</ReactMarkdown>
             </div>
           )}

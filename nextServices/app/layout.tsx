@@ -6,9 +6,8 @@ import './globals.css'
 import { RelevanceProvider } from '@/contexts/RelevanceContext'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.dev',
+  title: 'PDF Buddy',
+
 }
 
 export default function RootLayout({

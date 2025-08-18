@@ -3,6 +3,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { MongoClient, ObjectId } from "mongodb";
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017";
+const serviceName = process.env.SERVICE_NAME || '127.0.0.1';
 
 export async function POST(
   request: NextRequest,
@@ -24,7 +25,7 @@ export async function POST(
     const joinedSummaries=pdfSummaries.map(pdf=>`Summary of ${pdf.originalName}: ${pdf.summary}`).join("\n");
 
     // Call FastAPI backend
-    const fastapiRes = await fetch("http://127.0.0.1:8000/podcast", {
+    const fastapiRes = await fetch(`http://${serviceName}:8000/podcast`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -7,6 +7,7 @@ import path from 'path';
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/pdf-analysis';
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 const UPLOAD_DIR = path.join(process.cwd(), 'uploads');
+const serviceName = process.env.SERVICE_NAME || '127.0.0.1';
 
 async function getUserFromToken(request: NextRequest) {
   const token = request.cookies.get('token')?.value;
@@ -106,7 +107,7 @@ async function processHeadings(pdfId: string) {
       return;
     }
 
-    const response = await fetch('http://127.0.0.1:8000/predict', {
+    const response = await fetch(`http://${serviceName}:8000/predict`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

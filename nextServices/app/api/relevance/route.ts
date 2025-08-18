@@ -114,8 +114,8 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
-    const relevanceRes = await fetch('http://127.0.0.1:8000/relevance', {
+    const serviceName = process.env.SERVICE_NAME || '127.0.0.1';
+    const relevanceRes = await fetch(`http://${serviceName}:8000/relevance`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

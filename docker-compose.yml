@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  nextjs:
+    build:
+      context: ./nextServices
+    ports:
+      - "8080:8080"
+    environment:
+     
+    depends_on:
+      - fastapi
+      - mongo
+    volumes:
+      - ./nextServices/uploads:/app/uploads
+    
+  fastapi:
+    build:
+      context: ./pythonServices
+    ports:
+      - "8000:8000"
+    environments:
+    
+    volumes:
+      - ./pythonServices:/app
+      - ./nextServices/uploads:/app/uploads
+  
+  mongo:
+    image: mongo:6.0
+    restart: always
+    ports:
+      - "27016:27017"
+    volumes:
+      - mongo_data:/data/db
+volumes:
+  mongo_data:

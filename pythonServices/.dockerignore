@@ -1,0 +1,5 @@
+chroma_storage/
+saved_models/
+*.wav
+*.mp3
+__pycache__/

@@ -5,24 +5,24 @@ from dotenv import load_dotenv
 from pydub import AudioSegment
 from pydub.utils import which
 
-# Gemini
+# gcp
 from google import genai
 from google.genai import types
 
 load_dotenv()
 
-# Initialize Gemini client only if needed
+# Initialize gcp client only if needed
 client = None
-if os.getenv("TTS_PROVIDER", "gemini").lower() == "gemini":
+if os.getenv("TTS_PROVIDER", "gcp").lower() == "gcp":
     client = genai.Client()
 
-def generate_gemini_podcast(conversation, output_file="podcast.wav"):
+def generate_gcp_podcast(conversation, output_file="podcast.wav"):
     """
     Generate a multi-speaker podcast audio file from a conversation list.
     conversation = [("kore", "line1"), ("enceladus", "line2"), ...]
     """
 
-    # Build script for Gemini
+    # Build script for gcp
     script = "\n".join([f"{speaker.capitalize()}: {line}" for speaker, line in conversation])
 
     response = client.models.generate_content(
@@ -51,7 +51,6 @@ def generate_gemini_podcast(conversation, output_file="podcast.wav"):
         ),
     )
 
-    # Extract audio data (raw PCM 16-bit mono @ 24kHz)
     data = response.candidates[0].content.parts[0].inline_data.data
 
     # Save to wav file
@@ -119,7 +118,7 @@ def generate_azure_podcast(conversation, output_file="podcast.mp3"):
 
     final_track = AudioSegment.silent(1000)
     for speaker, text in conversation:
-        audio_segment = synthesize_azure(text, speaker_voices[speaker])
+        audio_segment = synthesize_azure(text, speaker_voices[speaker.lower()])
         final_track += audio_segment + AudioSegment.silent(400)
 
     export_audio(final_track, output_file)
@@ -130,18 +129,19 @@ def export_audio(audio: AudioSegment, output_file: str):
         audio.export(output_file, format="mp3")
         print(f"🎧 Podcast saved as {output_file} (MP3)")
     else:
-        wav_file = output_file.replace(".mp3", ".wav")
-        audio.export(wav_file, format="wav")
-        print(f"⚠️ ffmpeg not found. Saved as {wav_file} (WAV instead).")
+        raise RuntimeError("FFmpeg is not installed. Please install FFmpeg to export audio files.")
 
 
 def generate_podcast(conversation, output_file="podcast.mp3"):
-    backend = os.getenv("TTS_PROVIDER", "gemini").lower()
+    backend = os.getenv("TTS_PROVIDER", "gcp").lower()
 
-    if backend == "gemini":
-        return generate_gemini_podcast(conversation, output_file)
+    if backend == "gcp":
+        return generate_gcp_podcast(conversation, output_file)
     elif backend == "azure":
-        return generate_azure_podcast(conversation, output_file)
+        try:
+            return generate_azure_podcast(conversation, output_file)
+        except:
+            return generate_gcp_podcast(conversation, output_file)
     else:
         raise NotImplementedError(f"Backend '{backend}' is not implemented yet.")
 

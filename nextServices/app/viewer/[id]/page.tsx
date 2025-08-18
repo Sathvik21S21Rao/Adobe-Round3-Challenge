@@ -71,13 +71,23 @@ export default function PDFViewerPage() {
 
   const { results, setResults } = useRelevance();
 
-  useEffect(() => {
-    loadPDFData();
-    loadAdobeSDK();
-  }, [pdfId]);
+useEffect(() => {
+  // Load PDF metadata and SDK in parallel
+  const init = async () => {
+    setLoading(true);
+    try {
+      await Promise.all([loadPDFData(), loadAdobeSDK()]);
+      setLoading(false);
+    } catch (err) {
+      console.error("Init error:", err);
+      setLoading(false);
+    }
+  };
+  init();
+}, [pdfId]);
 
   useEffect(() => {
-    if (pdf) initializePDFViewer();
+    if (pdf && window.AdobeDC) initializePDFViewer();
   }, [pdf, results]);
 
   const loadPDFData = async () => {
@@ -166,7 +176,6 @@ export default function PDFViewerPage() {
               page_height: number
             ) => {
               bbox = fitzToAdobeBBox(bbox, page_height);
-              console.log(bbox);
               
               return {
                 "@context": [
@@ -237,7 +246,6 @@ export default function PDFViewerPage() {
                   console.error('Error adding annotation:', e);
                 }
               }
-              console.log(`✅ Added ${annotations.length} annotations.`);
             }
           }
         });
