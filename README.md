@@ -66,9 +66,6 @@ docker run -it -p 8080:8080 -p 8000:8000 -p 27017:27017 --name adobe-r3-containe
 
 ## Features
 
-- **User Mamagement**
-   Users can sign up or log in to access/upload documents with features as described below.
-
 - **PDF Upload & Folder Organization**  
   Upload PDFs and keep them neatly grouped by folders for better management and quick access.
 
