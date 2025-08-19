@@ -4,7 +4,6 @@ FROM ubuntu:22.04
 # Prevent tzdata from prompting during install
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
-ENV NEXT_PUBLIC_ADOBE_EMBED_API_KEY=${ADOBE_EMBED_API_KEY}
 ENV MONGODB_URI="mongodb://localhost:27017/pdf-analysis"
 ENV JWT_SECRET="rockBottomUppercut"
 
@@ -55,6 +54,8 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Expose ports
 EXPOSE 80 8080 8000 27017
+
+ENTRYPOINT ["/entrypoint.sh"]
 
 # ---------- Run ----------
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
