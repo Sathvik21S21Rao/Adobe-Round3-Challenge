@@ -61,7 +61,7 @@ docker build -t adobe-round3 .
 Include all the environment variables with -e flag. All the ports must be included as given below:
 
 ```bash
-docker run -it -p 8080:8080 -p 8000:8000 -p 27017:27017 --name adobe-r3-container -e ADOBE_EMBED_API_KEY="...." -e GOOGLE_API_KEY="...." -e TTS_PROVIDER="..." GEMINI_MODEL="gemini-2.5-flash" -e LLM_PROVIDER="gemini" -e AZURE_TTS_ENDPOINT="...." -e AZURE_TTS_KEY="....."
+docker run -it -p 8080:8080 -p 8000:8000 -p 27017:27017 --name adobe-r3-container -e ADOBE_EMBED_API_KEY="...." -e GOOGLE_API_KEY="...." -e TTS_PROVIDER="..." -e GEMINI_MODEL="gemini-2.5-flash" -e LLM_PROVIDER="gemini" -e AZURE_TTS_ENDPOINT="...." -e AZURE_TTS_KEY="....."
 ```
 
 ## Features
