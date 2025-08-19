@@ -55,7 +55,10 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Expose ports
 EXPOSE 80 8080 8000 27017
 
-ENTRYPOINT ["/entrypoint.sh"]
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+ENTRYPOINT ["/app/entrypoint.sh"]
 
 # ---------- Run ----------
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

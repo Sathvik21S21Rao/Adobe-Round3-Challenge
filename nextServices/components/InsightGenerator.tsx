@@ -86,7 +86,7 @@ export default function InsightGenerator({
       const simulateStreaming = async () => {
         for (let i = 0; i < str.length; i++) {
           setInsight((prev) => prev + str[i]);
-          await new Promise((resolve) => setTimeout(resolve, 100));
+          await new Promise((resolve) => setTimeout(resolve, 10));
         }
       };
 

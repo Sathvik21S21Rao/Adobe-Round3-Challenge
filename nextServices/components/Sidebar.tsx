@@ -82,14 +82,14 @@ export default function Sidebar({ folderId, pdfList }: SidebarProps) {
         const { value, done: readerDone } = await reader.read();
         if (value) {
           const chunk = decoder.decode(value, { stream: true });
-          setResponse((prev) => prev + chunk);
+          str += chunk;
         }
         done = readerDone;
       }
       const simulateStreaming = async () => {
         for (let i = 0; i < str.length; i++) {
           setResponse((prev) => prev + str[i]);
-          await new Promise((resolve) => setTimeout(resolve, 100));
+          await new Promise((resolve) => setTimeout(resolve, 10));
         }
       };
 
