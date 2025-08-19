@@ -406,6 +406,12 @@ useEffect(() => {
                 </Button>
               </div>
             )}
+            {!selectedText && (
+              <div className="p-3 border-b border-gray-800">
+                <h2 className="text-lg font-bold">No Text Selected</h2>
+                <p className="text-sm text-gray-400">Select text to see relevant sections and insights.</p>
+              </div>
+            )}
           </div>
 
           {/* Related PDFs */}

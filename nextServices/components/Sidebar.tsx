@@ -77,7 +77,7 @@ export default function Sidebar({ folderId, pdfList }: SidebarProps) {
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let done = false;
-
+      let str = "";
       while (!done) {
         const { value, done: readerDone } = await reader.read();
         if (value) {
@@ -86,6 +86,14 @@ export default function Sidebar({ folderId, pdfList }: SidebarProps) {
         }
         done = readerDone;
       }
+      const simulateStreaming = async () => {
+        for (let i = 0; i < str.length; i++) {
+          setResponse((prev) => prev + str[i]);
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+      };
+
+      await simulateStreaming();
     } catch (err) {
       console.error(err);
       setResponse("⚠️ Something went wrong.");

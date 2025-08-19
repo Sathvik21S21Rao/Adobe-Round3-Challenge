@@ -2,9 +2,10 @@ from google import genai
 from typing import List
 from dotenv import load_dotenv
 from pydantic import BaseModel
+import os
 load_dotenv()
 
-client = genai.Client()
+client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
 class FAQ(BaseModel):
     question: str
@@ -27,7 +28,7 @@ def get_summary_faq(path: str):
 
     # Generate structured response
     response = client.models.generate_content(
-        model="gemini-2.0-flash-001",
+        model=os.getenv("GEMINI_MODEL"),
         contents=["Summarize this document and generate FAQs. Use only the content from the document to generate FAQs and summary. Generate them in markdown format", file],
         config={
             "response_mime_type": "application/json",
@@ -63,7 +64,7 @@ Return the output in **markdown** format.
 
     # Streaming API (sync generator)
     response_stream = client.models.generate_content_stream(
-        model="gemini-2.0-flash",
+        model=os.getenv("GEMINI_MODEL"),
         contents=[prompt]
     )
 
@@ -75,9 +76,9 @@ Return the output in **markdown** format.
                     yield part.text
 
 def make_podcast(summaries:str):
-    prompt = f"Create a podcast script based on the following summaries: {summaries}. The 2 podcast hosts are 'kore' and 'enceladus'. Make sure to include engaging dialogue and a clear narrative structure. The podcast should be about 5 minutes. Each person's dialogue should be at least 30 seconds."
+    prompt = f"Create a podcast script based on the following summaries: {summaries}. The 2 podcast hosts are 'kore' and 'enceladus'. Make sure to include engaging dialogue and a clear narrative structure. The podcast should be about 2 to 3 minutes. Each person's dialogue should be at least 30 seconds."
     response = client.models.generate_content(
-        model="gemini-2.0-flash",
+        model=os.getenv("GEMINI_MODEL"),
         contents=[prompt],
         config={
             "response_mime_type": "application/json",
@@ -103,7 +104,7 @@ Your task is to:
 
 Format the guide in **markdown** with clear headings and structure. Make it actionable and engaging for someone who wants to deeply understand this material."""
     response_stream = client.models.generate_content_stream(
-        model="gemini-2.0-flash",
+        model=os.getenv("GEMINI_MODEL"),
         contents=[prompt]
     )
 

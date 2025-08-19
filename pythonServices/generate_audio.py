@@ -14,7 +14,7 @@ load_dotenv()
 # Initialize gcp client only if needed
 client = None
 if os.getenv("TTS_PROVIDER", "gcp").lower() == "gcp":
-    client = genai.Client()
+    client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
 def generate_gcp_podcast(conversation, output_file="podcast.wav"):
     """

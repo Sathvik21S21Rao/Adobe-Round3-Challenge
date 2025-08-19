@@ -1,0 +1,11 @@
+
+nextServices/node_modules
+nextServices/.next/
+pythonServices/__pycache__
+pythonServices/chroma_storage/
+pythonServices/saved_models/
+*.pyc
+*.wav
+*.mp3
+pythonServices/.env
+nextServices/.env.local

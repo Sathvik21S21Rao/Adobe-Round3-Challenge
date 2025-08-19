@@ -70,17 +70,27 @@ export default function InsightGenerator({
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let done = false;
+      let str = "";
 
       while (!done) {
         const { value, done: readerDone } = await reader.read();
         if (value) {
           const chunk = decoder.decode(value, { stream: true });
           // Append chunk to insight for live Markdown rendering
-          console.log(chunk);
-          setInsight((prev) => prev + chunk);
+          str += chunk;
         }
         done = readerDone;
       }
+
+      // SIMULATE STREAMING
+      const simulateStreaming = async () => {
+        for (let i = 0; i < str.length; i++) {
+          setInsight((prev) => prev + str[i]);
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+      };
+
+      await simulateStreaming();
 
       setLoading(false);
     } catch (err) {
